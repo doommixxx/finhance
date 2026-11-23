@@ -3,7 +3,7 @@
  * Скрипт для установки зависимостей backend
  */
 
-const { spawn } = require('child_process');
+const { backendPath, spawnBackendPython } = require('./backend-python');
 const path = require('path');
 const fs = require('fs');
 
@@ -26,7 +26,7 @@ function checkPython() {
   return new Promise((resolve, reject) => {
     colorLog('cyan', '🐍 Проверка Python...');
     
-    const python = spawn('python', ['--version'], { shell: true });
+    const python = spawnBackendPython(['--version']);
     
     python.stdout.on('data', (data) => {
       const version = data.toString().trim();
@@ -40,6 +40,10 @@ function checkPython() {
       reject(new Error('Python не установлен'));
     });
     
+    python.on('close', (code) => {
+      if (code !== 0) reject(new Error('Python не найден или не запускается'));
+    });
+
     python.on('error', (error) => {
       colorLog('red', `❌ Ошибка проверки Python: ${error.message}`);
       reject(error);
@@ -49,7 +53,6 @@ function checkPython() {
 
 function installBackendDependencies() {
   return new Promise((resolve, reject) => {
-    const backendPath = path.join(__dirname, '..', 'finhance-backend');
     
     // Проверяем существование requirements.txt
     const requirementsPath = path.join(backendPath, 'requirements.txt');
@@ -61,10 +64,8 @@ function installBackendDependencies() {
     
     colorLog('cyan', '📦 Установка зависимостей backend...');
     
-    const pip = spawn('pip', ['install', '-r', 'requirements.txt'], {
-      cwd: backendPath,
-      stdio: 'inherit',
-      shell: true
+    const pip = spawnBackendPython(['-m', 'pip', 'install', '-r', 'requirements.txt'], {
+      stdio: 'inherit'
     });
     
     pip.on('close', (code) => {
@@ -85,7 +86,6 @@ function installBackendDependencies() {
 }
 
 function setupBackendEnv() {
-  const backendPath = path.join(__dirname, '..', 'finhance-backend');
   const envPath = path.join(backendPath, '.env');
   const envExamplePath = path.join(backendPath, 'env.example');
   

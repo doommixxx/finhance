@@ -8,47 +8,45 @@
 
 ## 🚀 Быстрый старт
 
-### Автоматическая установка и запуск
+### Windows и терминал PowerShell в VS Code
 
-```bash
-# Установка зависимостей
-npm install
+Откройте папку `fin-hance-nextjs`, в которой находится `package.json`.
+Для запуска нужны Node.js, Python 3.12 и доступный PostgreSQL.
 
-# Настройка backend (установка Python зависимостей)
-npm run dev:setup
-
-# Запуск всего приложения (frontend + backend)
-npm run dev
+```powershell
+npm.cmd ci
+py -3.12 -m venv finhance-backend/.venv
+.\finhance-backend\.venv\Scripts\python.exe -m pip install -r finhance-backend/requirements.txt
+if (-not (Test-Path finhance-backend/.env)) {
+    Copy-Item finhance-backend/env.example finhance-backend/.env
+}
 ```
 
-### Ручная установка
+Если команда `py` недоступна, вызовите установленный Python 3.12 по полному пути с теми же аргументами `-m venv finhance-backend/.venv`. Сохраните существующий `.env`, если база уже настроена. Для новой установки создайте базу в PostgreSQL и укажите в `finhance-backend/.env` свои `DATABASE_URL` и `SECRET_KEY`.
 
-#### Frontend (Next.js)
-```bash
-# Установка зависимостей
-npm install
+Для совместного запуска выполните команду ниже. Скрипт сам выбирает Python из `finhance-backend/.venv`, если эта среда существует.
 
-# Запуск в режиме разработки
-npm run dev:frontend
+```powershell
+npm.cmd run dev
 ```
 
-#### Backend (FastAPI)
-```bash
-# Переход в папку backend
-cd finhance-backend
+Если порт 8000 занят, перед запуском задайте `$env:BACKEND_PORT = "8001"`. В этом случае Swagger доступен по адресу http://127.0.0.1:8001/docs.
 
-# Установка Python зависимостей
-pip install -r requirements.txt
+Для раздельного запуска откройте два терминала в папке `fin-hance-nextjs`. В первом выполните `npm.cmd run dev:frontend`, во втором — `npm.cmd run dev:backend`.
 
-# Создание .env файла
-cp env.example .env
+Если стандартные порты заняты, остановите прежние экземпляры через их терминалы или выберите свободные порты. При совместном запуске Next.js выводит фактический адрес frontend в строке `Local`. Для раздельного запуска на других портах используйте:
 
-# Настройка .env файла (обязательно!)
-# Обновите DATABASE_URL и другие переменные
+```powershell
+# Терминал frontend
+npm.cmd run dev:frontend -- --port 3002
 
-# Запуск backend
-python start.py
+# Терминал backend
+$env:BACKEND_PORT = '8017'
+npm.cmd run dev:backend
 ```
+
+Frontend хранит операции, цели, достижения и настройки в `localStorage` текущего браузера. FastAPI предоставляет отдельный JWT API с хранением данных в PostgreSQL. Интерфейс пока не обращается к API, поэтому можно запускать его отдельно.
+Данные браузера привязаны к адресу и порту. Открывайте привычный адрес, чтобы продолжить работу с ранее сохранёнными данными.
 
 ## 📁 Структура проекта
 
@@ -94,7 +92,7 @@ fin-hance-nextjs/
 
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8000
-- **API Documentation**: http://localhost:8000/docs
+- **Swagger UI**: http://localhost:8000/docs
 - **ReDoc**: http://localhost:8000/redoc
 
 ## 🔧 Настройка
@@ -119,7 +117,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 
 # CORS
-ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+ALLOWED_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
 
 # Environment
 ENVIRONMENT=development
@@ -168,7 +166,7 @@ npm run start
 ## 🐛 Устранение неполадок
 
 ### Backend не запускается
-1. Проверьте установку Python 3.8+
+1. Проверьте установку Python 3.12 и путь к виртуальной среде
 2. Установите зависимости: `npm run dev:setup`
 3. Настройте .env файл
 4. Проверьте подключение к базе данных
@@ -176,7 +174,7 @@ npm run start
 ### Frontend не запускается
 1. Установите зависимости: `npm install`
 2. Проверьте версию Node.js (18+)
-3. Очистите кэш: `npm run build`
+3. Проверьте сборку командой `npm.cmd run build`
 
 ### Проблемы с базой данных
 1. Убедитесь, что PostgreSQL запущен

@@ -14,7 +14,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateY: [30, 0],
       duration,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -26,7 +26,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateX: [-30, 0],
       duration,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -38,7 +38,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateX: [30, 0],
       duration,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -50,7 +50,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       scale: [0.8, 1],
       duration,
       delay,
-      easing: 'easeOutBack'
+      ease: 'outBack'
     });
   };
 
@@ -62,7 +62,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateY: [50, 0],
       duration,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -74,7 +74,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateY: [30, 0],
       duration: 500,
       delay: stagger,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -85,7 +85,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       scale: [1, 1.05, 1],
       duration: 200,
       delay,
-      easing: 'easeInOutQuad'
+      ease: 'inOutQuad'
     });
   };
 
@@ -96,7 +96,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateX: [0, -10, 10, -10, 10, 0],
       duration: 400,
       delay,
-      easing: 'easeInOutQuad'
+      ease: 'inOutQuad'
     });
   };
 
@@ -109,7 +109,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateY: [20, 0],
       duration: 400,
       delay,
-      easing: 'easeOutBack'
+      ease: 'outBack'
     });
   };
 
@@ -121,8 +121,8 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       scale: [1, 0.9],
       translateY: [0, 20],
       duration: 300,
-      easing: 'easeInBack',
-      complete: callback
+      ease: 'inBack',
+      onComplete: () => callback?.()
     });
   };
 
@@ -136,7 +136,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       translateX,
       duration: 400,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 
@@ -148,7 +148,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       scale: [0.95, 1],
       duration: 800,
       delay,
-      easing: 'easeOutExpo'
+      ease: 'outExpo'
     });
   };
 

@@ -9,7 +9,7 @@ interface FloatingActionButtonProps {
 }
 
 export default function FloatingActionButton({ onClick }: FloatingActionButtonProps) {
-  const { ref, scaleIn, pulse } = useAnime();
+  const { ref, scaleIn, pulse } = useAnime<HTMLButtonElement>();
 
   useEffect(() => {
     // Анимация появления кнопки только при монтировании

@@ -30,8 +30,8 @@ class TransactionService:
         user_id: int,
         skip: int = 0,
         limit: int = 100,
-        type_filter: Optional[str] = None,
-        category_filter: Optional[str] = None,
+        type_filter: Optional[TransactionType] = None,
+        category_filter: Optional[TransactionCategory] = None,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None
     ) -> List[Transaction]:
