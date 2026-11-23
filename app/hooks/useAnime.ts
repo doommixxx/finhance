@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { animate } from 'animejs';
 
 export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
@@ -100,7 +100,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
     });
   };
 
-  const modalIn = (delay = 0) => {
+  const modalIn = useCallback((delay = 0) => {
     if (!ref.current) return;
     
     animate(ref.current, {
@@ -111,7 +111,7 @@ export const useAnime = <T extends HTMLElement = HTMLDivElement>() => {
       delay,
       ease: 'outBack'
     });
-  };
+  }, []);
 
   const modalOut = (callback?: () => void) => {
     if (!ref.current) return;
