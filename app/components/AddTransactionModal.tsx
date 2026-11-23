@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { X } from 'lucide-react';
 import { NewTransaction } from '../types';
+import { transactionCategories } from '../transactionCategories';
 import { useAnime } from '../hooks/useAnime';
 
 interface AddTransactionModalProps {
@@ -13,8 +14,6 @@ interface AddTransactionModalProps {
   onAddTransaction: () => void;
   isDarkTheme: boolean;
 }
-
-const categories = ['Еда', 'Транспорт', 'Развлечения', 'Здоровье', 'Одежда', 'Образование', 'Другое', 'Зарплата'];
 
 export default function AddTransactionModal({
   isOpen, 
@@ -93,7 +92,7 @@ export default function AddTransactionModal({
                 onChange={(e) => onTransactionChange({...newTransaction, category: e.target.value})}
                 className={`w-full px-5 py-4 border-2 rounded-2xl focus:border-yellow-400 focus:outline-none transition-colors ${isDarkTheme ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-200 text-gray-900'}`}
               >
-                {categories.map(cat => (
+                {transactionCategories.map(cat => (
                   <option key={cat} value={cat} className={isDarkTheme ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'}>{cat}</option>
                 ))}
               </select>
