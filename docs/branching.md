@@ -5,7 +5,7 @@
 ## Работа над задачей
 
 1. Назначьте исполнителя в GitHub Issue. Обновите локальный `main` командой `git pull --ff-only origin main`.
-2. Создайте от него ветку с номером задачи, например `fix/1-income-form`, `feat/2-monthly-limits` или `docs/8-branching`.
+2. Создайте от него ветку с номером задачи, например `fix/1-income-form`, `feat/2-monthly-limits` или `docs/9-branching`.
 3. Используйте Conventional Commits. Допустимые типы — `feat`, `fix`, `docs`, `chore`, `refactor`. Пример заголовка — `fix(#1): keep income form stable while typing`.
 4. Отправьте ветку на GitHub и откройте PR в `main`. Укажите `Closes #ID`, фактический номер Issue, причину изменений, шаги проверки и затронутые части проекта.
 5. Назначьте напарника ревьюером. Он проверяет изменения в GitHub, оставляет замечания и подтверждает готовность через **Approve**. Автор отвечает на замечания и вносит правки.
