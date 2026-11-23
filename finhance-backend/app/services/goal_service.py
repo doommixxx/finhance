@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from typing import List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from app.models.goal import Goal as GoalModel, GoalStatus
 from app.schemas.goal import Goal, GoalCreate, GoalUpdate, GoalProgress
@@ -29,7 +29,7 @@ class GoalService:
         user_id: int,
         skip: int = 0,
         limit: int = 100,
-        status_filter: Optional[str] = None
+        status_filter: Optional[GoalStatus] = None
     ) -> List[Goal]:
         """Получить цели пользователя с фильтрацией"""
         query = select(GoalModel).where(GoalModel.user_id == user_id)
@@ -160,11 +160,11 @@ class GoalService:
         
         progress_list = []
         for goal in goals:
-            progress_percentage = (goal.current_amount / goal.target_amount) * 100
+            progress_percentage = (goal.current_amount / goal.target_amount) * 100 if goal.target_amount > 0 else 0
             
             days_remaining = None
             if goal.target_date:
-                days_remaining = (goal.target_date - datetime.now()).days
+                days_remaining = (goal.target_date - datetime.now(goal.target_date.tzinfo)).days
                 if days_remaining < 0:
                     days_remaining = 0
             

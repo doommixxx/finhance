@@ -4,10 +4,11 @@ from typing import List, Optional
 from datetime import datetime
 
 from app.core.database import get_db
+from app.models.transaction import TransactionType, TransactionCategory
 from app.schemas.transaction import Transaction, TransactionCreate, TransactionUpdate, TransactionSummary
 from app.schemas.user import User
 from app.services.transaction_service import TransactionService
-from app.services.auth_service import AuthService
+from app.services.auth_service import get_current_user as require_user
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ router = APIRouter()
 @router.post("/", response_model=Transaction)
 async def create_transaction(
     transaction_data: TransactionCreate,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Создать новую транзакцию"""
@@ -32,11 +33,11 @@ async def create_transaction(
 async def get_transactions(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    type_filter: Optional[str] = Query(None),
-    category_filter: Optional[str] = Query(None),
+    type_filter: Optional[TransactionType] = Query(None),
+    category_filter: Optional[TransactionCategory] = Query(None),
     start_date: Optional[datetime] = Query(None),
     end_date: Optional[datetime] = Query(None),
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить список транзакций пользователя"""
@@ -58,7 +59,7 @@ async def get_transactions(
 async def get_transaction_summary(
     start_date: Optional[datetime] = Query(None),
     end_date: Optional[datetime] = Query(None),
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить сводку по транзакциям"""
@@ -75,7 +76,7 @@ async def get_transaction_summary(
 @router.get("/{transaction_id}", response_model=Transaction)
 async def get_transaction(
     transaction_id: int,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить конкретную транзакцию"""
@@ -98,7 +99,7 @@ async def get_transaction(
 async def update_transaction(
     transaction_id: int,
     transaction_update: TransactionUpdate,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Обновить транзакцию"""
@@ -121,7 +122,7 @@ async def update_transaction(
 @router.delete("/{transaction_id}")
 async def delete_transaction(
     transaction_id: int,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Удалить транзакцию"""

@@ -9,7 +9,7 @@ Backend API для приложения управления личными фи
 - **PostgreSQL** - реляционная база данных
 - **Pydantic** - валидация данных
 - **JWT** - аутентификация
-- **Alembic** - миграции базы данных
+- **Alembic** - конфигурация инструмента миграций. Каталог ревизий отсутствует. При старте SQLAlchemy создаёт отсутствующие таблицы
 
 ## Структура проекта
 
@@ -51,20 +51,22 @@ pip install -r requirements.txt
 ```
 
 2. **Настройка базы данных:**
-Создайте файл `.env` на основе `.env.example` и настройте подключение к PostgreSQL.
+Создайте файл `.env` на основе `env.example` и настройте подключение к PostgreSQL.
 
 3. **Запуск приложения:**
 ```bash
-python main.py
+python start.py
 ```
 
 API будет доступен по адресу: `http://localhost:8000`
+
+Для Windows и настройки виртуальной среды см. [инструкцию в корне проекта](../README.md). В `.env` поле `ALLOWED_ORIGINS` задаётся JSON-массивом строк.
 
 ## API Endpoints
 
 ### Аутентификация
 - `POST /api/v1/auth/register` - Регистрация
-- `POST /api/v1/auth/login` - Вход
+- `POST /api/v1/auth/login` - Вход. Отправьте форму с полями `username` (email) и `password`
 - `GET /api/v1/auth/me` - Текущий пользователь
 
 ### Пользователи

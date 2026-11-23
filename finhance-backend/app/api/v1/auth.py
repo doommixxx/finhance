@@ -1,16 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime, timedelta
 from typing import Optional
 
 from app.core.database import get_db
 from app.schemas.user import User, UserCreate, UserLogin, Token
-from app.services.auth_service import AuthService
+from app.services.auth_service import AuthService, get_current_user as require_user
 from app.services.user_service import UserService
 
 router = APIRouter()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 @router.post("/register", response_model=User)
@@ -57,7 +56,7 @@ async def login(
 
 @router.get("/me", response_model=User)
 async def get_current_user(
-    current_user: User = Depends(auth_service.get_current_user)
+    current_user: User = Depends(require_user)
 ):
     """Получить информацию о текущем пользователе"""
     return current_user

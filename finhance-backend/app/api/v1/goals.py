@@ -4,10 +4,11 @@ from typing import List, Optional
 from datetime import datetime
 
 from app.core.database import get_db
+from app.models.goal import GoalStatus
 from app.schemas.goal import Goal, GoalCreate, GoalUpdate, GoalProgress
 from app.schemas.user import User
 from app.services.goal_service import GoalService
-from app.services.auth_service import AuthService
+from app.services.auth_service import get_current_user as require_user
 
 router = APIRouter()
 
@@ -15,7 +16,7 @@ router = APIRouter()
 @router.post("/", response_model=Goal)
 async def create_goal(
     goal_data: GoalCreate,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Создать новую финансовую цель"""
@@ -32,8 +33,8 @@ async def create_goal(
 async def get_goals(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
-    status_filter: Optional[str] = Query(None),
-    current_user: User = Depends(AuthService.get_current_user),
+    status_filter: Optional[GoalStatus] = Query(None),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить список целей пользователя"""
@@ -50,7 +51,7 @@ async def get_goals(
 
 @router.get("/progress", response_model=List[GoalProgress])
 async def get_goals_progress(
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить прогресс по всем активным целям"""
@@ -63,7 +64,7 @@ async def get_goals_progress(
 @router.get("/{goal_id}", response_model=Goal)
 async def get_goal(
     goal_id: int,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить конкретную цель"""
@@ -86,7 +87,7 @@ async def get_goal(
 async def update_goal(
     goal_id: int,
     goal_update: GoalUpdate,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Обновить цель"""
@@ -110,7 +111,7 @@ async def update_goal(
 async def contribute_to_goal(
     goal_id: int,
     amount: float,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Внести вклад в цель"""
@@ -133,7 +134,7 @@ async def contribute_to_goal(
 @router.delete("/{goal_id}")
 async def delete_goal(
     goal_id: int,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Удалить цель"""

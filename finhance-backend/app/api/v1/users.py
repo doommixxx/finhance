@@ -5,14 +5,14 @@ from typing import List
 from app.core.database import get_db
 from app.schemas.user import User, UserUpdate
 from app.services.user_service import UserService
-from app.services.auth_service import AuthService
+from app.services.auth_service import get_current_user as require_user
 
 router = APIRouter()
 
 
 @router.get("/me", response_model=User)
 async def get_current_user(
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Получить информацию о текущем пользователе"""
@@ -22,7 +22,7 @@ async def get_current_user(
 @router.put("/me", response_model=User)
 async def update_current_user(
     user_update: UserUpdate,
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Обновить информацию о текущем пользователе"""
@@ -40,7 +40,7 @@ async def update_current_user(
 
 @router.delete("/me")
 async def delete_current_user(
-    current_user: User = Depends(AuthService.get_current_user),
+    current_user: User = Depends(require_user),
     db: AsyncSession = Depends(get_db)
 ):
     """Удалить текущего пользователя"""

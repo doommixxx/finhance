@@ -10,7 +10,6 @@ class Base(DeclarativeBase):
 # Create async engine
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=True if settings.ENVIRONMENT == "development" else False,
     future=True
 )
 

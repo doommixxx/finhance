@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+import os
 import uvicorn
 from contextlib import asynccontextmanager
 
@@ -54,7 +55,7 @@ async def health_check():
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
-        port=8000,
+        host="127.0.0.1",
+        port=int(os.environ.get("BACKEND_PORT", "8000")),
         reload=True
     )
