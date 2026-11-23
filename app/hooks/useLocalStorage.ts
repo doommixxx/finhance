@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Transaction, Goal, Achievement } from '../types';
+import { expenseLimitsStorageKey, isExpenseLimitBackup } from '../expenseLimits';
 
 /**
  * Хук для работы с localStorage
@@ -183,6 +184,7 @@ export function useDataExport() {
       transactions: JSON.parse(localStorage.getItem('finhance-transactions') || '[]'),
       goals: JSON.parse(localStorage.getItem('finhance-goals') || '[]'),
       achievements: JSON.parse(localStorage.getItem('finhance-achievements') || '[]'),
+      expenseLimits: JSON.parse(localStorage.getItem(expenseLimitsStorageKey) || '[]'),
       settings: {
         theme: localStorage.getItem('finhance-theme') === 'true',
         activeTab: localStorage.getItem('finhance-active-tab') || 'dashboard',
@@ -216,11 +218,17 @@ export function useDataExport() {
           if (!data.version || !data.transactions || !data.goals || !data.achievements) {
             throw new Error('Неверный формат файла');
           }
+          if (data.expenseLimits !== undefined && !isExpenseLimitBackup(data.expenseLimits)) {
+            throw new Error('Неверные или повторяющиеся лимиты расходов');
+          }
 
           // Сохраняем данные в localStorage
           localStorage.setItem('finhance-transactions', JSON.stringify(data.transactions));
           localStorage.setItem('finhance-goals', JSON.stringify(data.goals));
           localStorage.setItem('finhance-achievements', JSON.stringify(data.achievements));
+          if (data.expenseLimits !== undefined) {
+            localStorage.setItem(expenseLimitsStorageKey, JSON.stringify(data.expenseLimits));
+          }
           
           if (data.settings) {
             localStorage.setItem('finhance-theme', data.settings.theme.toString());
@@ -244,6 +252,7 @@ export function useDataExport() {
     localStorage.removeItem('finhance-transactions');
     localStorage.removeItem('finhance-goals');
     localStorage.removeItem('finhance-achievements');
+    localStorage.removeItem(expenseLimitsStorageKey);
     localStorage.removeItem('finhance-theme');
     localStorage.removeItem('finhance-active-tab');
     localStorage.removeItem('finhance-filter-category');

@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Transaction } from '../types';
 import { useAnime } from '../hooks/useAnime';
+import ExpenseLimits from './ExpenseLimits';
 
 interface DashboardProps {
   transactions: Transaction[];
@@ -66,6 +67,7 @@ export default function Dashboard({ transactions, isDarkTheme }: DashboardProps)
 
   return (
     <div ref={ref} className="space-y-8">
+      <ExpenseLimits isDarkTheme={isDarkTheme} />
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Pie Chart */}

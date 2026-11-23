@@ -2,6 +2,7 @@
 
 import { Filter } from 'lucide-react';
 import { Transaction } from '../types';
+import { transactionCategories } from '../transactionCategories';
 
 interface TransactionsProps {
   transactions: Transaction[];
@@ -9,8 +10,6 @@ interface TransactionsProps {
   filterCategory: string;
   onFilterChange: (category: string) => void;
 }
-
-const categories = ['Еда', 'Транспорт', 'Развлечения', 'Здоровье', 'Одежда', 'Образование', 'Другое', 'Зарплата'];
 
 export default function Transactions({ transactions, isDarkTheme, filterCategory, onFilterChange }: TransactionsProps) {
   const filteredTransactions = filterCategory === 'all' 
@@ -31,7 +30,7 @@ export default function Transactions({ transactions, isDarkTheme, filterCategory
           >
             Все
           </button>
-          {categories.map(cat => (
+          {transactionCategories.map(cat => (
             <button
               key={cat}
               onClick={() => onFilterChange(cat)}

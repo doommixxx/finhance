@@ -7,6 +7,14 @@ export interface Transaction {
   description: string;
 }
 
+export interface ExpenseLimit {
+  id: number;
+  category: string;
+  month: number;
+  year: number;
+  amount: number;
+}
+
 export interface Goal {
   id: number;
   title: string;
